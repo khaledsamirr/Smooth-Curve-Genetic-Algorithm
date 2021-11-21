@@ -227,11 +227,10 @@ public class Main {
 
             initializePopulation(parameters, points, population);
 
-
             ArrayList<Chromosome> selectedChromosomes = new ArrayList<>();
 
             for (int i = 0; i < parameters.getNumOfGenerations(); i++) {
-//TODO: selectedChromosomes = tournmentSelection()
+
                 selectedChromosomes = tournamentSelection(population, parameters, points);
 
                 if (selectedChromosomes.size() >= 2) {
@@ -293,12 +292,8 @@ public class Main {
         ArrayList<Point> points = new ArrayList<>();
 
 
-        for (Chromosome i : population) {
-            System.out.println(i.toString());
-        }
-
         if (sc.hasNextLine()) {
-            parameters.setNumberOfSets(sc.nextInt());
+            parameters.setTCsNum(sc.nextInt());
             solve(parameters, sc, points, population);
         }
 

@@ -232,7 +232,7 @@ public class Main {
 
             for (int i = 0; i < parameters.getNumOfGenerations(); i++) {
 //TODO: selectedChromosomes = tournmentSelection()
-                //selectedChromosomes = biasedSelectChromosome(parameters, population);
+                selectedChromosomes = tournamentSelection(population, parameters, points);
 
                 if (selectedChromosomes.size() >= 2) {
 
@@ -292,13 +292,6 @@ public class Main {
         ArrayList<Chromosome> population = new ArrayList<>();
         ArrayList<Point> points = new ArrayList<>();
 
-        initializePopulation(parameters, points, population);
-
-        for (Chromosome i : population) {
-            System.out.println(i.toString());
-        }
-        System.out.println("--------------------");
-        crossover(population.get(0), population.get(1), 1, parameters, points, population);
 
         for (Chromosome i : population) {
             System.out.println(i.toString());

@@ -1,7 +1,7 @@
 public class Parameters {
-    private int LB=0;
-    private int UB=0;
-    private double b=0;
+    private int LB = 0;
+    private int UB = 0;
+    private double b = 0;
     private int NumberOfSets = 0;
     private int populationSize = 10;
     private boolean fixedPopulationSize = true;
@@ -10,27 +10,30 @@ public class Parameters {
     private int numOfSplitPoints = 1;
     private int chromosomeSize = 2;
     private int numOfGenerations = 0;
-    private int polynomialDegree=1;
+    private int polynomialDegree = 1;
 
     public Parameters(int populationSize, boolean fixedPopulationSize, int numOfGenerations, int numOfSplitPoints,
-        double mutationRate, double crossoverRate,int lowerBound,int upperBound,double b) {
+                      double mutationRate, double crossoverRate, int lowerBound, int upperBound, double b, int polynomialDegree) {
         this.numOfSplitPoints = numOfSplitPoints;
         this.numOfGenerations = numOfGenerations;
         this.fixedPopulationSize = fixedPopulationSize;
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
-        this.LB=lowerBound;
-        this.UB=upperBound;
-        this.b=b;
+        this.LB = lowerBound;
+        this.UB = upperBound;
+        this.b = b;
+        this.polynomialDegree = polynomialDegree;
     }
 
     public double getB() {
         return b;
     }
+
     public int getNumberOfSets() {
         return NumberOfSets;
     }
+
     public int getLB() {
         return LB;
     }
@@ -38,6 +41,11 @@ public class Parameters {
     public int getUB() {
         return UB;
     }
+
+    public int getPolynomialDegree() {
+        return polynomialDegree;
+    }
+
     public int getPopulationSize() {
         return populationSize;
     }

@@ -195,10 +195,14 @@ public class Main {
         double bestFitness = 0.0;
         Chromosome bestChromosome = new Chromosome();
 
-        for (Chromosome i : population) {
-            if (i.getFitness() > bestFitness) {
-                bestFitness = i.getFitness();
-                bestChromosome = i;
+        for (int i = 0; i < population.size(); i++) {
+            if (i == 0) {
+                bestFitness = population.get(i).getFitness();
+                bestChromosome = population.get(i);
+            }
+            if (population.get(i).getFitness() < bestFitness) {
+                bestFitness = population.get(i).getFitness();
+                bestChromosome = population.get(i);
             }
         }
 
@@ -261,7 +265,7 @@ public class Main {
 
 
             chromosomeSeq = TCsChromosome.toString();
-            fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + /*", Error = " + TCsChromosome.getError() +*/ "\n");
+            fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + ", Error = " + TCsChromosome.getFitness() + "\n");
 
 
             System.out.println(bestChromosomeFitness);
@@ -274,7 +278,6 @@ public class Main {
         }
 
         fileWriter.close();
-        //calcError(bestChromosomes, parameters);
     }
 
 

@@ -1,4 +1,5 @@
 public class Parameters {
+    private int TCsNum = 0;
     private int LB = 0;
     private int UB = 0;
     private double b = 0;
@@ -26,76 +27,80 @@ public class Parameters {
         this.polynomialDegree = polynomialDegree;
     }
 
+    public int getTCsNum() {
+        return TCsNum;
+    }
+
+    public void setTCsNum(int TCsNum) {
+        this.TCsNum = TCsNum;
+    }
+
     public double getB() {
         return b;
-    }
-
-    public int getNumberOfSets() {
-        return NumberOfSets;
-    }
-
-    public int getLB() {
-        return LB;
-    }
-
-    public int getUB() {
-        return UB;
-    }
-
-    public int getPolynomialDegree() {
-        return polynomialDegree;
-    }
-
-    public int getPopulationSize() {
-        return populationSize;
-    }
-
-    public double getMutationRate() {
-        return mutationRate;
-    }
-
-    public void setLB(int LB) {
-        this.LB = LB;
-    }
-
-    public void setUB(int UB) {
-        this.UB = UB;
     }
 
     public void setB(double b) {
         this.b = b;
     }
 
-    public void setPolynomialDegree(int polynomialDegree) {
-        this.polynomialDegree = polynomialDegree;
-    }
-
-    public double getCrossoverRate() {
-        return crossoverRate;
-    }
-
-    public int getNumOfSplitPoints() {
-        return numOfSplitPoints;
-    }
-
-    public int getChromosomeSize() {
-        return chromosomeSize;
+    public int getNumberOfSets() {
+        return NumberOfSets;
     }
 
     public void setNumberOfSets(int numberOfSets) {
         NumberOfSets = numberOfSets;
     }
 
+    public int getLB() {
+        return LB;
+    }
+
+    public void setLB(int LB) {
+        this.LB = LB;
+    }
+
+    public int getUB() {
+        return UB;
+    }
+
+    public void setUB(int UB) {
+        this.UB = UB;
+    }
+
+    public int getPolynomialDegree() {
+        return polynomialDegree;
+    }
+
+    public void setPolynomialDegree(int polynomialDegree) {
+        this.polynomialDegree = polynomialDegree;
+    }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
     public void setPopulationSize(int populationSize) {
         this.populationSize = populationSize;
+    }
+
+    public double getMutationRate() {
+        return mutationRate;
     }
 
     public void setMutationRate(double mutationRate) {
         this.mutationRate = mutationRate;
     }
 
+    public double getCrossoverRate() {
+        return crossoverRate;
+    }
+
     public void setCrossoverRate(double crossoverRate) {
         this.crossoverRate = crossoverRate;
+    }
+
+    public int getNumOfSplitPoints() {
+        return numOfSplitPoints;
     }
 
     public void setNumOfSplitPoints(int numOfSplitPoints) {
@@ -103,6 +108,10 @@ public class Parameters {
             this.numOfSplitPoints = numOfSplitPoints;
         else
             this.numOfSplitPoints = 1;
+    }
+
+    public int getChromosomeSize() {
+        return chromosomeSize;
     }
 
     public void setChromosomeSize(int chromosomeSize) {

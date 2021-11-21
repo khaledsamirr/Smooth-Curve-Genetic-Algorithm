@@ -180,17 +180,25 @@ public class Main {
         ArrayList<Chromosome> selected = new ArrayList<>();
     }*/
 
+    public static void setSuitablePopulationSize(Parameters parameters) {
+        if (parameters.isFixedPopulationSize() == false) {
+            if (parameters.getChromosomeSize() < 9)
+                parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
+            else
+                parameters.setPopulationSize(750);
+        }
+    }
 
-    public static void solve(Parameters parameters, Scanner sc, ArrayList<Item> items, ArrayList<Chromosome> population) throws IOException {
+    public static void solve(Parameters parameters, Scanner sc, ArrayList<Point> points, ArrayList<Chromosome> population) throws IOException {
         // TODO: 11/17/2021   int currentGeneration=0;
 
         FileWriter fileWriter = new FileWriter("Output.txt");
         int generationRepetitionCounter = 0;
         String bestChromosome = " ";
         for (int q = 0; q < parameters.getTCsNum(); q++) {
-            readFile(sc, parameters, items);
+            readFile(sc, parameters, points);
 
-            parameters.setChromosomeSize(items.size());
+            parameters.setChromosomeSize(points.size());
             setSuitablePopulationSize(parameters);
 
             System.out.println("===============================================");
@@ -198,7 +206,7 @@ public class Main {
             System.out.println("Population size: " + parameters.getPopulationSize());
             System.out.println("------------------------");
 
-            initializePopulation(parameters, items, population);
+            initializePopulation(parameters, points, population);
 
             ArrayList<Chromosome> selectedChromosomes = new ArrayList<>();
 
@@ -213,7 +221,7 @@ public class Main {
                     }
                 }
                 // for (Chromosome k : population) {
-                  //  System.out.println(k.toString());
+                //  System.out.println(k.toString());
                 //}
                 if (bestChromosome.equals(getBestFitness(population))) {
                     generationRepetitionCounter++;
@@ -232,7 +240,7 @@ public class Main {
             System.out.println(bestChromosome);
             System.out.println("===========================================");
 
-            items.clear();
+            points.clear();
             population.clear();
 
         }

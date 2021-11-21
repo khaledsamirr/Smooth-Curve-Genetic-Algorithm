@@ -24,6 +24,7 @@ public class Main {
         if (sc.hasNextLine()) {
             splitLine = sc.nextLine().split(" ");
             NumOfPoints = Integer.valueOf(splitLine[0]);
+            parameters.setNumberOfSets(NumOfPoints);
             parameters.setPolynomialDegree(Integer.valueOf(splitLine[1]));
             readFileItems(sc, NumOfPoints, points);
         }
@@ -98,7 +99,7 @@ public class Main {
             coefficients.clear();
 
             if (!chromosomeExists(chromosome, population)) {
-                //chromosome.calcFitness(parameters, points);
+                chromosome.calcFitness(parameters, points);
                 population.add(chromosome);
             } else {
                 j--;
@@ -191,7 +192,7 @@ public class Main {
     }
 
     public static Chromosome getBestChromosome(ArrayList<Chromosome> population) {
-        double bestFitness = 0;
+        double bestFitness = 0.0;
         Chromosome bestChromosome = new Chromosome();
 
         for (Chromosome i : population) {
@@ -240,13 +241,15 @@ public class Main {
                     }
                 }
 
-                if (bestChromosomeFitness.equals(String.valueOf(getBestChromosome(population).getFitness()))) {
+                TCsChromosome = getBestChromosome(population);
+
+                /*if (bestChromosomeFitness.equals(String.valueOf(getBestChromosome(population).getFitness()))) {
                     generationRepetitionCounter++;
                 } else {
                     generationRepetitionCounter = 0;
                     TCsChromosome = getBestChromosome(population);
                     bestChromosomeFitness = String.valueOf(TCsChromosome.getFitness());
-                }
+                }*/
 
                 if (generationRepetitionCounter > 2) {
                     i = parameters.getNumOfGenerations() + 1;
@@ -254,18 +257,15 @@ public class Main {
                     System.out.println("Generation:" + (i + 1) + " Finished");
             }
 
-            fileWriter.write("Case: " + (q + 1) + " " + bestChromosomeFitness + "\n");
-            int numOfItems = 0;
+            String chromosomeSeq = "";
 
 
-            fileWriter.write(numOfItems + "\n");
-            for (int i = 0; i <= parameters.getPolynomialDegree(); i++) {
-                fileWriter.write(TCsChromosome.genes.get(i).toString() + "\n");
-            }
+            chromosomeSeq = TCsChromosome.toString();
+            fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + /*", Error = " + TCsChromosome.getError() +*/ "\n");
 
 
             System.out.println(bestChromosomeFitness);
-            bestChromosomes.add(Integer.valueOf(bestChromosomeFitness));
+            //bestChromosomes.add(Integer.valueOf(bestChromosomeFitness));
             System.out.println("===========================================");
 
             points.clear();
@@ -289,6 +289,18 @@ public class Main {
         ArrayList<Chromosome> population = new ArrayList<>();
         ArrayList<Point> points = new ArrayList<>();
 
+        /*points.add(new Point(4, 7));
+        parameters.setNumberOfSets(1);
+        initializePopulation(parameters, points, population);
+        System.out.println(getBestChromosome(population).toString());
+
+        Chromosome chromosome = new Chromosome();
+        chromosome.genes.add(new Gene(0.01));
+        chromosome.genes.add(new Gene(0.9));
+        chromosome.genes.add(new Gene(0.4));
+        chromosome.calcFitness(parameters, points);
+
+        System.out.println(chromosome.getFitness());*/
 
         if (sc.hasNextLine()) {
             parameters.setTCsNum(Integer.valueOf(sc.nextLine()));

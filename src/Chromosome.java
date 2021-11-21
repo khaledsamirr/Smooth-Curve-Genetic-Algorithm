@@ -8,10 +8,19 @@ public class Chromosome {
 
     Chromosome() {
     }
+
     public Chromosome(ArrayList<Double> coefficients) {
         for (Double i : coefficients) {
             genes.add(new Gene(i));
         }
+    }
+
+    public double getError() {
+        return error;
+    }
+
+    public void setError(double error) {
+        this.error = error;
     }
 
     /*public void addGene(Gene gene) {
@@ -36,7 +45,7 @@ public class Chromosome {
         double Ycalc = 0.0;
         for (int i = 0; i < parameters.getNumberOfSets(); i++) {
             for (int j = 0; j < genes.size(); j++) {
-                Ycalc += genes.get(i).getCoefficient() * (Math.pow(points.get(i).getX(), j));
+                Ycalc += genes.get(j).getCoefficient() * (Math.pow(points.get(i).getX(), j));
             }
             err = Math.pow(Ycalc - points.get(i).getY(), 2);
             fitness += err;

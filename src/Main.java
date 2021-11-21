@@ -194,20 +194,17 @@ public class Main {
     }
 
     public static void setSuitablePopulationSize(Parameters parameters) {
-        if (parameters.isFixedPopulationSize() == false) {
-            if (parameters.getChromosomeSize() < 9)
-                parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
-            else
-                parameters.setPopulationSize(750);
-        }
+        parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
     }
 
     public static void solve(Parameters parameters, Scanner sc, ArrayList<Point> points, ArrayList<Chromosome> population) throws IOException {
-        // TODO: 11/17/2021   int currentGeneration=0;
 
         FileWriter fileWriter = new FileWriter("Output.txt");
         int generationRepetitionCounter = 0;
-        String bestChromosome = " ";
+        String bestChromosomeFitness = " ";
+        Chromosome TCsChromosome = new Chromosome();
+        ArrayList<Integer> bestChromosomes = new ArrayList<>();
+
         for (int q = 0; q < parameters.getTCsNum(); q++) {
             readFile(sc, parameters, points);
 
@@ -216,41 +213,61 @@ public class Main {
 
             System.out.println("===============================================");
             System.out.println("TC number: " + (q + 1));
-            System.out.println("Population size: " + parameters.getPopulationSize());
+            //System.out.println("Population size: " + parameters.getPopulationSize());
             System.out.println("------------------------");
 
             initializePopulation(parameters, points, population);
 
+
             ArrayList<Chromosome> selectedChromosomes = new ArrayList<>();
 
             for (int i = 0; i < parameters.getNumOfGenerations(); i++) {
-                System.out.println("At generation:" + (i + 1));
-                selectedChromosomes = selectChromosomes(parameters, population);
+
+                //selectedChromosomes = randSelectChromosomes(parameters, population);
+                selectedChromosomes = biasedSelectChromosome(parameters, population);
+                System.out.println("Pop size: " + population.size());
 
                 if (selectedChromosomes.size() >= 2) {
-                    System.out.println("Number of New Chromosomes: " + (selectedChromosomes.size()));
+                    //System.out.println("Number of New Chromosomes: " + (selectedChromosomes.size()));
                     for (int j = 0; j < selectedChromosomes.size(); j += 2) {
-                        crossover(selectedChromosomes.get(j), selectedChromosomes.get(j + 1), parameters, population);
+                        if (crossover(selectedChromosomes.get(j), selectedChromosomes.get(j + 1), parameters, population)) {
+                            // population = removeRedundant(selectedChromosomes.get(j), population);
+                            // population = removeRedundant(selectedChromosomes.get(j + 1), population);
+
+                        }
                     }
                 }
-                // for (Chromosome k : population) {
-                //  System.out.println(k.toString());
-                //}
-                if (bestChromosome.equals(getBestFitness(population))) {
+
+                if (bestChromosomeFitness.equals(String.valueOf(getBestChromosome(population).getTotalBenefit()))) {
                     generationRepetitionCounter++;
                 } else {
                     generationRepetitionCounter = 0;
-                    bestChromosome = getBestFitness(population);
+                    TCsChromosome = getBestChromosome(population);
+                    bestChromosomeFitness = String.valueOf(TCsChromosome.getTotalBenefit());
                 }
 
                 if (generationRepetitionCounter > 2) {
                     i = parameters.getNumOfGenerations() + 1;
-                }
-
+                } else
+                    System.out.println("Generation:" + (i + 1) + " Finished");
             }
 
-            fileWriter.write("Case: " + (q + 1) + " " + bestChromosome + "\n");
-            System.out.println(bestChromosome);
+            fileWriter.write("Case: " + (q + 1) + " " + bestChromosomeFitness + "\n");
+            int numOfItems = 0;
+            for (int i = 0; i < parameters.getChromosomeSize(); i++) {
+                if (TCsChromosome.genes.get(i).getActive())
+                    numOfItems++;
+            }
+
+            fileWriter.write(numOfItems + "\n");
+            for (int i = 0; i < parameters.getChromosomeSize(); i++) {
+                if (TCsChromosome.genes.get(i).getActive())
+                    fileWriter.write(TCsChromosome.genes.get(i).getItem().toString() + "\n");
+            }
+
+
+            System.out.println(bestChromosomeFitness);
+            bestChromosomes.add(Integer.valueOf(bestChromosomeFitness));
             System.out.println("===========================================");
 
             points.clear();
@@ -259,6 +276,7 @@ public class Main {
         }
 
         fileWriter.close();
+        calcError(bestChromosomes, parameters);
     }
 
 

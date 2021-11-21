@@ -175,10 +175,23 @@ public class Main {
     }
 
     //TODO: tournamentSelection
-    /*public static ArrayList<Chromosome> tournamentSelection() {
-
-        ArrayList<Chromosome> selected = new ArrayList<>();
-    }*/
+    public static ArrayList<Chromosome> tournamentSelection(ArrayList<Chromosome>population,Parameters parameters,ArrayList<Point>points){
+        ArrayList<Chromosome> matingPool = new ArrayList<>();
+        double fit1=0.0,fit2=0.0;
+        for(int i=0;i<population.size();i++){
+            population.get(i).calcFitness(parameters,points);
+        }
+        for(int i=0;i<population.size();i+=2){
+            fit1=population.get(i).getFitness();
+            fit2=population.get(i+1).getFitness();
+            if(fit1<fit2){
+                matingPool.add(population.get(i));
+            }else{
+                matingPool.add(population.get(i+1));
+            }
+        }
+        return matingPool;
+    }
 
     public static void setSuitablePopulationSize(Parameters parameters) {
         if (parameters.isFixedPopulationSize() == false) {

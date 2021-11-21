@@ -236,9 +236,7 @@ public class Main {
                 if (selectedChromosomes.size() >= 2) {
 
                     for (int j = 0; j < selectedChromosomes.size(); j += 2) {
-
                         crossover(selectedChromosomes.get(j), selectedChromosomes.get(j + 1), i + 1, parameters, points, population);
-
                     }
                 }
 
@@ -293,7 +291,7 @@ public class Main {
 
 
         if (sc.hasNextLine()) {
-            parameters.setTCsNum(sc.nextInt());
+            parameters.setTCsNum(Integer.valueOf(sc.nextLine()));
             solve(parameters, sc, points, population);
         }
 

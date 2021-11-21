@@ -131,9 +131,6 @@ public class Main {
 
         Collections.sort(splitPoints);
 
-        for (int i : splitPoints) {
-            System.out.println(i);
-        }
 
         Chromosome newChromo1 = new Chromosome();
         Chromosome newChromo2 = new Chromosome();
@@ -175,10 +172,37 @@ public class Main {
     }
 
     //TODO: tournamentSelection
-    /*public static ArrayList<Chromosome> tournamentSelection() {
+    public static ArrayList<Chromosome> tournamentSelection(ArrayList<Chromosome> population, Parameters parameters, ArrayList<Point> points) {
+        ArrayList<Chromosome> matingPool = new ArrayList<>();
+        double fit1 = 0.0, fit2 = 0.0;
+        for (int i = 0; i < population.size(); i++) {
+            population.get(i).calcFitness(parameters, points);
+        }
+        for (int i = 0; i < population.size(); i += 2) {
+            fit1 = population.get(i).getFitness();
+            fit2 = population.get(i + 1).getFitness();
+            if (fit1 < fit2) {
+                matingPool.add(population.get(i));
+            } else {
+                matingPool.add(population.get(i + 1));
+            }
+        }
+        return matingPool;
+    }
 
-        ArrayList<Chromosome> selected = new ArrayList<>();
-    }*/
+    public static Chromosome getBestChromosome(ArrayList<Chromosome> population) {
+        double bestFitness = 0;
+        Chromosome bestChromosome = new Chromosome();
+
+        for (Chromosome i : population) {
+            if (i.getFitness() > bestFitness) {
+                bestFitness = i.getFitness();
+                bestChromosome = i;
+            }
+        }
+
+        return bestChromosome;
+    }
 
     public static void setSuitablePopulationSize(Parameters parameters) {
         parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
@@ -195,12 +219,10 @@ public class Main {
         for (int q = 0; q < parameters.getTCsNum(); q++) {
             readFile(sc, parameters, points);
 
-            parameters.setChromosomeSize(points.size());
             setSuitablePopulationSize(parameters);
 
             System.out.println("===============================================");
             System.out.println("TC number: " + (q + 1));
-            //System.out.println("Population size: " + parameters.getPopulationSize());
             System.out.println("------------------------");
 
             initializePopulation(parameters, points, population);
@@ -209,28 +231,24 @@ public class Main {
             ArrayList<Chromosome> selectedChromosomes = new ArrayList<>();
 
             for (int i = 0; i < parameters.getNumOfGenerations(); i++) {
-
-                //selectedChromosomes = randSelectChromosomes(parameters, population);
-                selectedChromosomes = biasedSelectChromosome(parameters, population);
-                System.out.println("Pop size: " + population.size());
+//TODO: selectedChromosomes = tournmentSelection()
+                //selectedChromosomes = biasedSelectChromosome(parameters, population);
 
                 if (selectedChromosomes.size() >= 2) {
-                    //System.out.println("Number of New Chromosomes: " + (selectedChromosomes.size()));
-                    for (int j = 0; j < selectedChromosomes.size(); j += 2) {
-                        if (crossover(selectedChromosomes.get(j), selectedChromosomes.get(j + 1), parameters, population)) {
-                            // population = removeRedundant(selectedChromosomes.get(j), population);
-                            // population = removeRedundant(selectedChromosomes.get(j + 1), population);
 
-                        }
+                    for (int j = 0; j < selectedChromosomes.size(); j += 2) {
+
+                        crossover(selectedChromosomes.get(j), selectedChromosomes.get(j + 1), i + 1, parameters, points, population);
+
                     }
                 }
 
-                if (bestChromosomeFitness.equals(String.valueOf(getBestChromosome(population).getTotalBenefit()))) {
+                if (bestChromosomeFitness.equals(String.valueOf(getBestChromosome(population).getFitness()))) {
                     generationRepetitionCounter++;
                 } else {
                     generationRepetitionCounter = 0;
                     TCsChromosome = getBestChromosome(population);
-                    bestChromosomeFitness = String.valueOf(TCsChromosome.getTotalBenefit());
+                    bestChromosomeFitness = String.valueOf(TCsChromosome.getFitness());
                 }
 
                 if (generationRepetitionCounter > 2) {
@@ -241,15 +259,11 @@ public class Main {
 
             fileWriter.write("Case: " + (q + 1) + " " + bestChromosomeFitness + "\n");
             int numOfItems = 0;
-            for (int i = 0; i < parameters.getChromosomeSize(); i++) {
-                if (TCsChromosome.genes.get(i).getActive())
-                    numOfItems++;
-            }
+
 
             fileWriter.write(numOfItems + "\n");
-            for (int i = 0; i < parameters.getChromosomeSize(); i++) {
-                if (TCsChromosome.genes.get(i).getActive())
-                    fileWriter.write(TCsChromosome.genes.get(i).getItem().toString() + "\n");
+            for (int i = 0; i <= parameters.getPolynomialDegree(); i++) {
+                fileWriter.write(TCsChromosome.genes.get(i).toString() + "\n");
             }
 
 
@@ -263,7 +277,7 @@ public class Main {
         }
 
         fileWriter.close();
-        calcError(bestChromosomes, parameters);
+        //calcError(bestChromosomes, parameters);
     }
 
 
@@ -271,9 +285,9 @@ public class Main {
 
         Parameters parameters = new Parameters(2, false, 9, 2, 0.00, 0.5,
                 -10, 10, 1, 2);
-        String readFilePath = "";
+        String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
         File file = new File(readFilePath);
-        //Scanner sc = new Scanner(file);
+        Scanner sc = new Scanner(file);
 
         ArrayList<Chromosome> population = new ArrayList<>();
         ArrayList<Point> points = new ArrayList<>();
@@ -290,10 +304,10 @@ public class Main {
             System.out.println(i.toString());
         }
 
-        /*if (sc.hasNextLine()) {
+        if (sc.hasNextLine()) {
             parameters.setNumberOfSets(sc.nextInt());
-            //  solve(parameters, sc, points, population);
-        }*/
+            solve(parameters, sc, points, population);
+        }
 
 
     }

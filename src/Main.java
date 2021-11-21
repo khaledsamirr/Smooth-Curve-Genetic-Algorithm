@@ -61,6 +61,7 @@ public class Main {
 
         }
 
+        setCoeffPrecision(chromosome, 4);
         chromosome.calcFitness(parameters, points);
     }
 
@@ -72,6 +73,21 @@ public class Main {
         }
         return false;
     }
+
+    public static <T> double setPrecisionNum(T num, int numAfterPoint) {
+        Double dNum = (double) num;
+        dNum = dNum * Math.pow(10, numAfterPoint >= 1 ? numAfterPoint : 0);
+        dNum = Math.floor(dNum);
+        dNum = dNum / Math.pow(10, numAfterPoint >= 1 ? numAfterPoint : 0);
+        return dNum;
+    }
+
+    public static void setCoeffPrecision(Chromosome chromosome, int numAfterPoint) {
+        for (int i = 0; i < chromosome.genes.size(); i++) {
+            chromosome.genes.get(i).setCoefficient(setPrecisionNum(chromosome.genes.get(i).getCoefficient(), numAfterPoint));
+        }
+    }
+
 
     public static void initializePopulation(Parameters parameters, ArrayList<Point> points, ArrayList<Chromosome> population) {
 
@@ -87,9 +103,7 @@ public class Main {
             for (int k = 0; k <= parameters.getPolynomialDegree(); k++) {
                 randWholeNum = rand.nextInt(parameters.getUB());
                 randDoubleNum = rand.nextFloat();
-                randDoubleNum = randDoubleNum * Math.pow(10, 2);
-                randDoubleNum = Math.floor(randDoubleNum);
-                randDoubleNum = randDoubleNum / Math.pow(10, 2);
+                randDoubleNum = setPrecisionNum(randDoubleNum, 4);
 
                 coefficients.add(((double) randWholeNum + (randWholeNum != 10 ? randDoubleNum : 0)) * (rand.nextBoolean() ? 1 : -1));
             }
@@ -261,7 +275,7 @@ public class Main {
             }
             String chromosomeSeq = "";
 
-
+            setCoeffPrecision(TCsChromosome, 4);
             chromosomeSeq = TCsChromosome.toString();
             fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + ", Error = " + TCsChromosome.getFitness() + "\n");
 
@@ -281,27 +295,14 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Parameters parameters = new Parameters(2, false, 9, 2, 0.00, 0.5,
+        Parameters parameters = new Parameters(2, false, 9, 2, 0.05, 0.5,
                 -10, 10, 1, 2);
-        String readFilePath = "C:\\Users\\Khaled Samir\\Downloads\\Assignment 2 (1)\\input-2.txt";
+        String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
         File file = new File(readFilePath);
         Scanner sc = new Scanner(file);
 
         ArrayList<Chromosome> population = new ArrayList<>();
         ArrayList<Point> points = new ArrayList<>();
-
-        /*points.add(new Point(4, 7));
-        parameters.setNumberOfSets(1);
-        initializePopulation(parameters, points, population);
-        System.out.println(getBestChromosome(population).toString());
-
-        Chromosome chromosome = new Chromosome();
-        chromosome.genes.add(new Gene(0.01));
-        chromosome.genes.add(new Gene(0.9));
-        chromosome.genes.add(new Gene(0.4));
-        chromosome.calcFitness(parameters, points);
-
-        System.out.println(chromosome.getFitness());*/
 
         if (sc.hasNextLine()) {
             parameters.setTCsNum(Integer.valueOf(sc.nextLine()));

@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void readFileItems(Scanner sc, int NumOfPoints, ArrayList<Point> points) {
-        sc.nextLine();
         for (int i = 0; i < NumOfPoints; i++) {
             String[] splitLine;
             splitLine = sc.nextLine().split(" ");
@@ -260,7 +259,6 @@ public class Main {
                 } else
                     System.out.println("Generation:" + (i + 1) + " Finished");
             }
-
             String chromosomeSeq = "";
 
 
@@ -285,7 +283,7 @@ public class Main {
 
         Parameters parameters = new Parameters(2, false, 9, 2, 0.00, 0.5,
                 -10, 10, 1, 2);
-        String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
+        String readFilePath = "C:\\Users\\Khaled Samir\\Downloads\\Assignment 2 (1)\\input-2.txt";
         File file = new File(readFilePath);
         Scanner sc = new Scanner(file);
 

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class Chromosome {
 
     double fitness = 0.0;
-    double error = 0.0;
     ArrayList<Gene> genes = new ArrayList<>();
 
     Chromosome() {
@@ -14,18 +13,6 @@ public class Chromosome {
             genes.add(new Gene(i));
         }
     }
-
-    public double getError() {
-        return error;
-    }
-
-    public void setError(double error) {
-        this.error = error;
-    }
-
-    /*public void addGene(Gene gene) {
-        genes.add(gene);
-    }*/
 
     public void print() {
         String sequence = "[";
@@ -42,8 +29,9 @@ public class Chromosome {
     public void calcFitness(Parameters parameters, ArrayList<Point> points) {
         double fitness = 0.0;
         double err = 0.0;
-        double Ycalc = 0.0;
+        double Ycalc;
         for (int i = 0; i < parameters.getNumberOfSets(); i++) {
+            Ycalc = 0.0;
             for (int j = 0; j < genes.size(); j++) {
                 Ycalc += genes.get(j).getCoefficient() * (Math.pow(points.get(i).getX(), j));
             }

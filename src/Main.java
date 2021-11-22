@@ -112,7 +112,7 @@ public class Main {
             coefficients.clear();
 
             if (!chromosomeExists(chromosome, population)) {
-                chromosome.calcFitness(parameters, points);
+                //chromosome.calcFitness(parameters, points);
                 population.add(chromosome);
             } else {
                 j--;
@@ -189,9 +189,6 @@ public class Main {
     public static ArrayList<Chromosome> tournamentSelection(ArrayList<Chromosome> population, Parameters parameters, ArrayList<Point> points) {
         ArrayList<Chromosome> matingPool = new ArrayList<>();
         double fit1 = 0.0, fit2 = 0.0;
-        for (int i = 0; i < population.size(); i++) {
-            population.get(i).calcFitness(parameters, points);
-        }
         for (int i = 0; i < population.size(); i += 2) {
             fit1 = population.get(i).getFitness();
             fit2 = population.get(i + 1).getFitness();
@@ -223,7 +220,8 @@ public class Main {
     }
 
     public static void setSuitablePopulationSize(Parameters parameters) {
-        parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
+        if(!parameters.isFixedPopulationSize())
+            parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
     }
 
     public static void solve(Parameters parameters, Scanner sc, ArrayList<Point> points, ArrayList<Chromosome> population) throws IOException {
@@ -244,6 +242,9 @@ public class Main {
             System.out.println("------------------------");
 
             initializePopulation(parameters, points, population);
+            for(int i=0;i<population.size();i++){
+                population.get(i).calcFitness(parameters,points);
+            }
 
             ArrayList<Chromosome> selectedChromosomes = new ArrayList<>();
 
@@ -275,9 +276,10 @@ public class Main {
             }
             String chromosomeSeq = "";
 
-            setCoeffPrecision(TCsChromosome, 4);
+            setCoeffPrecision(TCsChromosome, 2);
             chromosomeSeq = TCsChromosome.toString();
-            fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + ", Error = " + TCsChromosome.getFitness() + "\n");
+            double err=setPrecisionNum(TCsChromosome.getFitness(),4);
+            fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + ", Error = " + err + "\n");
 
 
             System.out.println(bestChromosomeFitness);
@@ -295,9 +297,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Parameters parameters = new Parameters(2, false, 9, 2, 0.05, 0.5,
+        Parameters parameters = new Parameters(1000, true, 100, 2, 0.05, 0.5,
                 -10, 10, 1, 2);
-        String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
+        String readFilePath = "C:\\Users\\Khaled Samir\\Downloads\\Assignment 2 (1)\\input-2.txt";
         File file = new File(readFilePath);
         Scanner sc = new Scanner(file);
 

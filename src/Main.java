@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void readFileItems(Scanner sc, int NumOfPoints, ArrayList<Point> points) {
@@ -220,11 +221,13 @@ public class Main {
     }
 
     public static void setSuitablePopulationSize(Parameters parameters) {
-        if(!parameters.isFixedPopulationSize())
+        if (!parameters.isFixedPopulationSize())
             parameters.setPopulationSize((int) Math.pow(2, parameters.getChromosomeSize() - 1));
     }
 
     public static void solve(Parameters parameters, Scanner sc, ArrayList<Point> points, ArrayList<Chromosome> population) throws IOException {
+        StopWatch sw = new StopWatch();
+
 
         FileWriter fileWriter = new FileWriter("Output.txt");
         int generationRepetitionCounter = 0;
@@ -241,9 +244,20 @@ public class Main {
             System.out.println("TC number: " + (q + 1));
             System.out.println("------------------------");
 
+            sw.reset();
+            sw.start();
             initializePopulation(parameters, points, population);
-            for(int i=0;i<population.size();i++){
-                population.get(i).calcFitness(parameters,points);
+            sw.stop();
+            System.out.println(sw.getElapsedTime().toMillis() + "ms on Initialization");
+            System.out.println(sw.getElapsedTime().toSeconds() + "s on Initialization");
+            System.out.println(sw.getElapsedTime().toMinutes() + "m on Initialization");
+            System.out.println();
+
+            sw.reset();
+            sw.start();
+
+            for (int i = 0; i < population.size(); i++) {
+                population.get(i).calcFitness(parameters, points);
             }
 
             ArrayList<Chromosome> selectedChromosomes = new ArrayList<>();
@@ -255,7 +269,9 @@ public class Main {
                 if (selectedChromosomes.size() >= 2) {
 
                     for (int j = 0; j < selectedChromosomes.size(); j += 2) {
+
                         crossover(selectedChromosomes.get(j), selectedChromosomes.get(j + 1), i + 1, parameters, points, population);
+
                     }
                 }
 
@@ -271,23 +287,30 @@ public class Main {
 
                 if (generationRepetitionCounter > 2) {
                     i = parameters.getNumOfGenerations() + 1;
-                } else
-                    System.out.println("Generation:" + (i + 1) + " Finished");
+                } else {
+                    System.out.println("Generation:" + (i + 1) + " Finished of TC Num: " + (q + 1));
+                }
             }
             String chromosomeSeq = "";
 
             setCoeffPrecision(TCsChromosome, 2);
             chromosomeSeq = TCsChromosome.toString();
-            double err=setPrecisionNum(TCsChromosome.getFitness(),4);
+            double err = setPrecisionNum(TCsChromosome.getFitness(), 4);
             fileWriter.write(chromosomeSeq.substring(1, chromosomeSeq.length() - 1) + ", Error = " + err + "\n");
 
 
             System.out.println(bestChromosomeFitness);
             //bestChromosomes.add(Integer.valueOf(bestChromosomeFitness));
-            System.out.println("===========================================");
 
             points.clear();
             population.clear();
+
+            sw.stop();
+            System.out.println(sw.getElapsedTime().toMillis() + "ms TC: " + (q + 1));
+            System.out.println(sw.getElapsedTime().toSeconds() + "s TC: " + (q + 1));
+            System.out.println(sw.getElapsedTime().toMinutes() + "m TC: " + (q + 1));
+
+            System.out.println("===========================================");
 
         }
 
@@ -297,9 +320,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Parameters parameters = new Parameters(1000, true, 100, 2, 0.05, 0.5,
+        Parameters parameters = new Parameters(2000, true, 5000, 2, 0.05, 0.5,
                 -10, 10, 1, 2);
-        String readFilePath = "C:\\Users\\Khaled Samir\\Downloads\\Assignment 2 (1)\\input-2.txt";
+        String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
         File file = new File(readFilePath);
         Scanner sc = new Scanner(file);
 
@@ -310,7 +333,6 @@ public class Main {
             parameters.setTCsNum(Integer.valueOf(sc.nextLine()));
             solve(parameters, sc, points, population);
         }
-
 
     }
 }

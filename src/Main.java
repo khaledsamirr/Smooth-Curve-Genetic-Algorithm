@@ -227,7 +227,9 @@ public class Main {
 
     public static void solve(Parameters parameters, Scanner sc, ArrayList<Point> points, ArrayList<Chromosome> population) throws IOException {
         StopWatch sw = new StopWatch();
+        StopWatch swWholeTime = new StopWatch();
 
+        swWholeTime.start();
 
         FileWriter fileWriter = new FileWriter("Output.txt");
         int generationRepetitionCounter = 0;
@@ -237,6 +239,7 @@ public class Main {
 
         for (int q = 0; q < parameters.getTCsNum(); q++) {
             readFile(sc, parameters, points);
+            System.out.println("Polynomial Degree: " + parameters.getPolynomialDegree());
 
             setSuitablePopulationSize(parameters);
 
@@ -251,6 +254,7 @@ public class Main {
             System.out.println(sw.getElapsedTime().toMillis() + "ms on Initialization");
             System.out.println(sw.getElapsedTime().toSeconds() + "s on Initialization");
             System.out.println(sw.getElapsedTime().toMinutes() + "m on Initialization");
+            System.out.println(sw.getElapsedTime().toHours() + "hr on Initialization");
             System.out.println();
 
             sw.reset();
@@ -309,18 +313,25 @@ public class Main {
             System.out.println(sw.getElapsedTime().toMillis() + "ms TC: " + (q + 1));
             System.out.println(sw.getElapsedTime().toSeconds() + "s TC: " + (q + 1));
             System.out.println(sw.getElapsedTime().toMinutes() + "m TC: " + (q + 1));
+            System.out.println(sw.getElapsedTime().toHours() + "hr TC: " + (q + 1));
 
             System.out.println("===========================================");
 
         }
 
         fileWriter.close();
+        swWholeTime.stop();
+        System.out.println(swWholeTime.getElapsedTime().toMillis() + "ms");
+        System.out.println(swWholeTime.getElapsedTime().toSeconds() + "s");
+        System.out.println(swWholeTime.getElapsedTime().toMinutes() + "m");
+        System.out.println(swWholeTime.getElapsedTime().toHours() + "hr");
+
     }
 
 
     public static void main(String[] args) throws IOException {
 
-        Parameters parameters = new Parameters(2000, true, 5000, 2, 0.05, 0.5,
+        Parameters parameters = new Parameters(1024, true, 1024, 2, 0.05, 0.7,
                 -10, 10, 1, 2);
         String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
         File file = new File(readFilePath);

@@ -331,7 +331,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Parameters parameters = new Parameters(1024, true, 1024, 2, 0.05, 0.7,
+        Parameters parameters = new Parameters(1024, true, 1024, 2, 0.05, 0.6,
                 -10, 10, 1, 2);
         String readFilePath = "D:\\College\\Soft Computing\\Assignment\\Assignment #2\\input-2.txt";
         File file = new File(readFilePath);
